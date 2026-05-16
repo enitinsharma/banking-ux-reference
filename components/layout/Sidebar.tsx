@@ -11,21 +11,19 @@ import {
   Landmark,
   LayoutDashboard,
   SendHorizontal,
-  X,
 } from 'lucide-react';
 import { useTheme } from '@/lib/hooks/useTheme';
 import { cn } from '@/lib/utils';
-import { ThemeLogo } from './ThemeLogo';
 import type { ThemeId } from '@/types/themes';
 
 const navItems = [
-  { href: '/dashboard',        label: 'Dashboard',       icon: LayoutDashboard },
-  { href: '/accounts',         label: 'Accounts',        icon: Landmark },
-  { href: '/transactions',     label: 'Transactions',    icon: ArrowLeftRight },
-  { href: '/transfer',         label: 'Transfer',        icon: SendHorizontal },
-  { href: '/bills',            label: 'Bill Payments',   icon: FileText },
-  { href: '/service-requests', label: 'Service Requests',icon: Headphones },
-  { href: '/cards',            label: 'Cards & Rewards', icon: CreditCard },
+  { href: '/dashboard',        label: 'Dashboard',        icon: LayoutDashboard },
+  { href: '/accounts',         label: 'Accounts',         icon: Landmark },
+  { href: '/transactions',     label: 'Transactions',     icon: ArrowLeftRight },
+  { href: '/transfer',         label: 'Transfer',         icon: SendHorizontal },
+  { href: '/bills',            label: 'Bill Payments',    icon: FileText },
+  { href: '/service-requests', label: 'Service Requests', icon: Headphones },
+  { href: '/cards',            label: 'Cards & Rewards',  icon: CreditCard },
 ];
 
 const themeSwatches: Record<ThemeId, string> = {
@@ -35,43 +33,19 @@ const themeSwatches: Record<ThemeId, string> = {
   'warm-sandstone': 'bg-amber-700',
 };
 
-interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export function Sidebar({ isOpen, onClose }: SidebarProps) {
+export function Sidebar() {
   const pathname = usePathname();
   const { theme, themes, setTheme } = useTheme();
 
   return (
     <aside
       className={cn(
-        // Base — full-height drawer, slides in from left
-        'fixed bottom-0 left-0 top-0 z-40 flex w-72 flex-col',
+        // Desktop only — hidden on mobile where BottomNav takes over
+        'hidden lg:flex',
+        'fixed bottom-0 left-0 top-16 z-40 w-60 flex-col',
         'border-r border-ui-border bg-brand-sidebar',
-        'transition-transform duration-300 ease-in-out',
-        // Mobile: translate based on open state
-        isOpen ? 'translate-x-0' : '-translate-x-full',
-        // Desktop: always visible, narrower, sits below fixed header
-        'lg:w-60 lg:top-16 lg:translate-x-0',
       )}
     >
-      {/* ── Mobile-only header row (logo + close button) ── */}
-      <div className="flex h-16 shrink-0 items-center justify-between border-b border-ui-border px-4 lg:hidden">
-        <div className="flex items-center gap-2">
-          <ThemeLogo themeId={theme.id} />
-          <span className="font-bold text-content-primary">{theme.bankName}</span>
-        </div>
-        <button
-          onClick={onClose}
-          aria-label="Close navigation menu"
-          className="rounded-lg p-1.5 text-content-secondary transition-colors hover:bg-brand-page hover:text-content-primary"
-        >
-          <X className="h-5 w-5" />
-        </button>
-      </div>
-
       {/* ── Nav items ── */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
         <ul className="space-y-0.5">
@@ -81,7 +55,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               <li key={href}>
                 <Link
                   href={href}
-                  onClick={onClose}   // closes drawer on mobile after navigation
                   className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                     active
