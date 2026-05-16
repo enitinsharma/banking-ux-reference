@@ -55,7 +55,7 @@ const accounts: Account[] = [
     tenureElapsed: 5,
     // Matures next month — auto-renew will kick in; monthly interest credited
     maturityDate: monthsFromNow(1),
-    maturityAmount: 100000,  // principal returned; interest credited monthly
+    maturityAmount: 103400,  // principal + 6.8% p.a. over 6 months
     currency: 'INR',
     payoutFrequency: 'monthly',
     autoRenew: true,
