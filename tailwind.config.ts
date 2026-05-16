@@ -9,8 +9,26 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        accent: {
+          DEFAULT: "var(--accent)",
+          hover: "var(--accent-hover)",
+          fg: "var(--accent-foreground)",
+        },
+        brand: {
+          sidebar: "var(--bg-sidebar)",
+          header: "var(--header-bg)",
+          page: "var(--bg-page)",
+          card: "var(--card-bg)",
+        },
+        content: {
+          primary: "var(--text-primary)",
+          secondary: "var(--text-secondary)",
+        },
+        "ui-border": "var(--border)",
+      },
+      fontFamily: {
+        sans: ["var(--font-geist-sans)", "Arial", "Helvetica", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "monospace"],
       },
     },
   },
