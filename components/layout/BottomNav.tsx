@@ -49,10 +49,14 @@ export function BottomNav() {
         )}
       />
 
-      {/* ── More sheet — slides up from above the tab bar ── */}
+      {/* ── More sheet ──────────────────────────────────────────────────────
+          Anchored at bottom-0 (same as tab bar) so translate-y-full pushes
+          the entire sheet fully below the viewport when closed.
+          pb-16 inside keeps links clear of the tab bar when open.
+      ────────────────────────────────────────────────────────────────────── */}
       <div
         className={cn(
-          'fixed bottom-16 left-0 right-0 z-50 lg:hidden',
+          'fixed bottom-0 left-0 right-0 z-50 lg:hidden',
           'rounded-t-2xl border-t border-ui-border bg-brand-card shadow-xl',
           'transition-transform duration-300 ease-in-out',
           moreOpen ? 'translate-y-0' : 'translate-y-full',
@@ -69,7 +73,8 @@ export function BottomNav() {
           </button>
         </div>
 
-        <ul className="divide-y divide-ui-border border-t border-ui-border px-3 pb-6">
+        {/* pb-16 = height of the tab bar underneath */}
+        <ul className="divide-y divide-ui-border border-t border-ui-border px-3 pb-16 pt-1">
           {moreTabs.map(({ href, label, icon: Icon }) => {
             const active = pathname === href || pathname.startsWith(`${href}/`);
             return (
@@ -107,7 +112,7 @@ export function BottomNav() {
             <Link
               key={href}
               href={href}
-              className="flex flex-1 flex-col items-center justify-center gap-1"
+              className="relative flex flex-1 flex-col items-center justify-center gap-1"
             >
               <Icon
                 className={cn(
@@ -123,9 +128,8 @@ export function BottomNav() {
               >
                 {label}
               </span>
-              {/* Active dot */}
               {active && (
-                <span className="absolute bottom-1 h-1 w-1 rounded-full bg-accent" />
+                <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-accent" />
               )}
             </Link>
           );
@@ -134,9 +138,9 @@ export function BottomNav() {
         {/* More button */}
         <button
           onClick={() => setMoreOpen(v => !v)}
-          className="flex flex-1 flex-col items-center justify-center gap-1"
           aria-label="More navigation options"
           aria-expanded={moreOpen}
+          className="relative flex flex-1 flex-col items-center justify-center gap-1"
         >
           <MoreHorizontal
             className={cn(
@@ -153,7 +157,7 @@ export function BottomNav() {
             More
           </span>
           {moreActive && (
-            <span className="absolute bottom-1 h-1 w-1 rounded-full bg-accent" />
+            <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-accent" />
           )}
         </button>
       </nav>
