@@ -39,9 +39,12 @@ export function DashboardStats() {
   const savings = accounts.find(a => a.type === 'savings');
   const balance = savings?.balance ?? 0;
 
-  // Monthly spend: sum of debits in the latest transaction month (2026-05)
+  // Monthly spend: sum of debits in the current calendar month
+  const now = new Date();
+  const currentYM = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  const monthName = now.toLocaleString('en-IN', { month: 'long' });
   const monthlySpend = transactions
-    .filter(t => t.type === 'debit' && t.date.startsWith('2026-05'))
+    .filter(t => t.type === 'debit' && t.date.startsWith(currentYM))
     .reduce((sum, t) => sum + t.amount, 0);
 
   const points = summary?.points ?? 0;
@@ -60,7 +63,7 @@ export function DashboardStats() {
       <StatCard
         label="Monthly Spend"
         value={formatCurrency(monthlySpend)}
-        sub="May 2026"
+        sub={monthName}
         icon={TrendingDown}
         iconClassName="bg-rose-50 text-rose-600"
       />
