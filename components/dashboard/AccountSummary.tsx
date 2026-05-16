@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Home, Landmark, Lock } from 'lucide-react';
 import { useAccounts } from '@/lib/hooks/useAccounts';
-import { formatCurrency, formatDate } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import { Amount } from '@/components/ui/Amount';
 import type { Account } from '@/types/account';
