@@ -1,22 +1,36 @@
 'use client';
 
-import { Bell, Settings } from 'lucide-react';
+import { Bell, Menu, Settings } from 'lucide-react';
 import { useTheme } from '@/lib/hooks/useTheme';
 import { ThemeLogo } from './ThemeLogo';
 
-export function Header() {
+interface HeaderProps {
+  onMenuClick: () => void;
+}
+
+export function Header({ onMenuClick }: HeaderProps) {
   const { theme } = useTheme();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex h-16 items-center justify-between bg-brand-header px-6 shadow-md">
-      <div className="flex items-center gap-3">
+    <header className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between bg-brand-header px-4 shadow-md lg:px-6">
+      <div className="flex items-center gap-2 lg:gap-3">
+        {/* Hamburger — visible on mobile only */}
+        <button
+          onClick={onMenuClick}
+          aria-label="Open navigation menu"
+          className="rounded-lg p-1.5 text-white/80 transition-colors hover:bg-white/10 hover:text-white lg:hidden"
+        >
+          <Menu className="h-6 w-6" />
+        </button>
+
         <ThemeLogo themeId={theme.id} />
-        <span className="text-lg font-bold tracking-tight text-white">
+
+        <span className="text-base font-bold tracking-tight text-white lg:text-lg">
           {theme.bankName}
         </span>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 lg:gap-4">
         <button
           aria-label="Notifications"
           className="relative text-white/80 transition-colors hover:text-white"
@@ -29,16 +43,19 @@ export function Header() {
 
         <button
           aria-label="Settings"
-          className="text-white/80 transition-colors hover:text-white"
+          className="hidden text-white/80 transition-colors hover:text-white sm:block"
         >
           <Settings className="h-5 w-5" />
         </button>
 
-        <div className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5">
+        <div className="flex items-center gap-2 rounded-full bg-white/10 px-2.5 py-1.5 lg:px-3">
           <div className="flex h-7 w-7 items-center justify-center rounded-full bg-accent text-xs font-bold text-white">
             NS
           </div>
-          <span className="text-sm font-medium text-white">Nitin Sharma</span>
+          {/* Name hidden on small screens — avatar alone is enough */}
+          <span className="hidden text-sm font-medium text-white sm:block">
+            Nitin Sharma
+          </span>
         </div>
       </div>
     </header>
