@@ -3,26 +3,25 @@
 import { useEffect, useState, type ReactNode } from 'react';
 
 export function MSWProvider({ children }: { children: ReactNode }) {
-  const [ready, setReady] = useState(process.env.NODE_ENV !== 'development');
+  // MSW runs in every environment — this is a fully mock-driven demo app
+  // with no real backend. Production visitors need the mock data too.
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'development') return;
-
     import('../mocks/browser')
       .then(({ worker }) =>
         worker.start({
           onUnhandledRequest: 'bypass',
-          // Explicit URL avoids Edge/Firefox SW scope resolution failures
           serviceWorker: { url: '/mockServiceWorker.js' },
         }),
       )
       .then(() => setReady(true))
       .catch((err: unknown) => {
-        // SW registration can fail in hardened browsers (Edge enhanced security,
-        // Firefox private mode, some corporate proxies). Log the warning and
-        // render the app anyway — API calls will simply return 404s without mocks.
+        // Service Worker registration can fail in hardened browsers
+        // (Edge enhanced security, Firefox private mode, corporate proxies).
+        // Render the app anyway — pages degrade gracefully without mock data.
         console.warn(
-          '[MSW] Service Worker failed to start — app will render without mock data.\n',
+          '[MSW] Service Worker failed to start — rendering without mock data.\n',
           err,
         );
         setReady(true);
