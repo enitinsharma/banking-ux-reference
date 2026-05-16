@@ -13,7 +13,7 @@ The banking platform serves multiple financial institution (FI) tenants. Each FI
 - Requiring a rebuild per tenant
 - Introducing runtime CSS-in-JS overhead
 
-This mirrors the real-world constraint at Fiserv, where a single platform serves 1,000+ FI tenants.
+This mirrors the real-world constraint in core banking platforms, where a single platform serves 1,000+ financial institution tenants.
 
 ## Decision
 

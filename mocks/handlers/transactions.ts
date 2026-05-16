@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw';
 import type { Transaction } from '@/types/transaction';
 
 const transactions: Transaction[] = [
-  { id: 'txn-001', accountId: 'acc-001', type: 'credit', amount: 85000, currency: 'INR', description: 'Salary — Fiserv India Pvt Ltd', category: 'salary', date: '2026-05-01', reference: 'NEFT2605011234', balance: 245680.50 },
+  { id: 'txn-001', accountId: 'acc-001', type: 'credit', amount: 85000, currency: 'INR', description: 'Salary — Horizon Technologies Pvt Ltd', category: 'salary', date: '2026-05-01', reference: 'NEFT2605011234', balance: 245680.50 },
   { id: 'txn-002', accountId: 'acc-001', type: 'debit', amount: 3240, currency: 'INR', description: 'Amazon.in', category: 'shopping', date: '2026-05-02', reference: 'UPI2605023456' },
   { id: 'txn-003', accountId: 'acc-001', type: 'debit', amount: 580, currency: 'INR', description: 'Swiggy', category: 'food', date: '2026-05-03', reference: 'UPI2605034567' },
   { id: 'txn-004', accountId: 'acc-001', type: 'debit', amount: 2450, currency: 'INR', description: 'BESCOM Electricity', category: 'utilities', date: '2026-05-04', reference: 'BBPS2605045678' },
