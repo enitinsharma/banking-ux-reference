@@ -2,9 +2,10 @@
 
 import { PageHeader } from '@/components/layout/PageHeader';
 import { SavingsCard } from '@/components/accounts/SavingsCard';
-import { FixedDepositCard } from '@/components/accounts/FixedDepositCard';
-import { HomeLoanCard } from '@/components/accounts/HomeLoanCard';
+import { FixedDepositsSection } from '@/components/accounts/FixedDepositsSection';
+import { LoansSection } from '@/components/accounts/LoansSection';
 import { useAccounts } from '@/lib/hooks/useAccounts';
+import type { FixedDepositAccount, HomeLoanAccount } from '@/types/account';
 
 /* ── Skeleton ─────────────────────────────────────────── */
 function CardSkeleton() {
@@ -12,25 +13,27 @@ function CardSkeleton() {
     <div className="animate-pulse overflow-hidden rounded-xl border border-ui-border bg-brand-card">
       <div className="h-1.5 bg-brand-page" />
       <div className="space-y-4 p-6">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-lg bg-brand-page" />
-          <div className="space-y-1.5">
-            <div className="h-3 w-24 rounded bg-brand-page" />
-            <div className="h-3 w-36 rounded bg-brand-page" />
-          </div>
-        </div>
-        <div className="h-9 w-48 rounded bg-brand-page" />
-        <div className="space-y-2 rounded-lg border border-ui-border p-4">
-          {[0, 1, 2].map(i => (
-            <div key={i} className="flex justify-between">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-lg bg-brand-page" />
+            <div className="space-y-1.5">
               <div className="h-3 w-24 rounded bg-brand-page" />
-              <div className="h-3 w-32 rounded bg-brand-page" />
+              <div className="h-3 w-36 rounded bg-brand-page" />
+            </div>
+          </div>
+          <div className="h-6 w-20 rounded-full bg-brand-page" />
+        </div>
+        <div className="h-8 w-48 rounded bg-brand-page" />
+        <div className="space-y-3">
+          {[0, 1].map(i => (
+            <div key={i} className="flex items-start gap-3 py-2">
+              <div className="h-9 w-9 rounded-lg bg-brand-page" />
+              <div className="flex-1 space-y-1.5">
+                <div className="h-3 w-32 rounded bg-brand-page" />
+                <div className="h-2.5 w-full rounded bg-brand-page" />
+              </div>
             </div>
           ))}
-        </div>
-        <div className="flex gap-3">
-          <div className="h-8 w-28 rounded-lg bg-brand-page" />
-          <div className="h-8 w-36 rounded-lg bg-brand-page" />
         </div>
       </div>
     </div>
@@ -41,9 +44,9 @@ function CardSkeleton() {
 export default function AccountsPage() {
   const { accounts, loading, error } = useAccounts();
 
-  const savings    = accounts.find(a => a.type === 'savings');
-  const fixedDeposit = accounts.find(a => a.type === 'fixed_deposit');
-  const homeLoan   = accounts.find(a => a.type === 'home_loan');
+  const savings      = accounts.find(a => a.type === 'savings');
+  const fixedDeposits = accounts.filter(a => a.type === 'fixed_deposit') as FixedDepositAccount[];
+  const loans        = accounts.filter(a => a.type === 'home_loan') as HomeLoanAccount[];
 
   return (
     <div className="space-y-6">
@@ -73,9 +76,9 @@ export default function AccountsPage() {
       {/* ── Content ── */}
       {!loading && !error && (
         <div className="space-y-6">
-          {savings      && <SavingsCard      account={savings} />}
-          {fixedDeposit && <FixedDepositCard account={fixedDeposit} />}
-          {homeLoan     && <HomeLoanCard     account={homeLoan} />}
+          {savings         && <SavingsCard           account={savings} />}
+          {fixedDeposits.length > 0 && <FixedDepositsSection accounts={fixedDeposits} />}
+          {loans.length > 0         && <LoansSection         accounts={loans} />}
         </div>
       )}
     </div>

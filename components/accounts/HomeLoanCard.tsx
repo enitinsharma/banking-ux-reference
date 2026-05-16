@@ -50,9 +50,8 @@ export function HomeLoanCard({ account }: Props) {
               </p>
             </div>
           </div>
-          <span className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            Active
+          <span className="rounded-full border border-ui-border px-2.5 py-1 font-mono text-xs text-content-secondary">
+            ···· {account.accountNumber.slice(-4)}
           </span>
         </div>
 

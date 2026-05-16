@@ -29,6 +29,20 @@ const accounts: Account[] = [
     currency: 'INR',
   },
   {
+    id: 'acc-004',
+    type: 'fixed_deposit',
+    accountNumber: 'FD20230087',
+    name: 'Fixed Deposit — 7.25% p.a.',
+    principal: 200000,
+    interestRate: 7.25,
+    tenure: 12,
+    tenureElapsed: 9,
+    // 12-month FD, 9 months elapsed → 3 months remaining
+    maturityDate: monthsFromNow(3),
+    maturityAmount: 214500,
+    currency: 'INR',
+  },
+  {
     id: 'acc-003',
     type: 'home_loan',
     accountNumber: 'HL20210056',
