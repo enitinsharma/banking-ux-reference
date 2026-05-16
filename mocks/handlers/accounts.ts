@@ -27,6 +27,7 @@ const accounts: Account[] = [
     maturityDate: monthsFromNow(13),
     maturityAmount: 590250,
     currency: 'INR',
+    payoutFrequency: 'on_maturity',
   },
   {
     id: 'acc-004',
@@ -41,6 +42,23 @@ const accounts: Account[] = [
     maturityDate: monthsFromNow(3),
     maturityAmount: 214500,
     currency: 'INR',
+    payoutFrequency: 'quarterly',
+  },
+  {
+    id: 'acc-005',
+    type: 'fixed_deposit',
+    accountNumber: 'FD20221034',
+    name: 'Fixed Deposit — 6.8% p.a.',
+    principal: 100000,
+    interestRate: 6.8,
+    tenure: 6,
+    tenureElapsed: 5,
+    // Matures next month — auto-renew will kick in; monthly interest credited
+    maturityDate: monthsFromNow(1),
+    maturityAmount: 100000,  // principal returned; interest credited monthly
+    currency: 'INR',
+    payoutFrequency: 'monthly',
+    autoRenew: true,
   },
   {
     id: 'acc-003',
@@ -55,6 +73,21 @@ const accounts: Account[] = [
     emi: 39840,
     // EMI is always due on the 5th of next month
     nextEmiDate: nextMonthDay(5),
+    currency: 'INR',
+  },
+  {
+    id: 'acc-006',
+    type: 'personal_loan',
+    accountNumber: 'PL20231089',
+    name: 'Personal Loan',
+    purpose: 'Home Renovation',
+    sanctionedAmount: 500000,
+    outstandingAmount: 312500,
+    interestRate: 12.5,
+    tenureMonths: 48,
+    elapsedMonths: 18,
+    emi: 13360,
+    nextEmiDate: nextMonthDay(12),
     currency: 'INR',
   },
 ];

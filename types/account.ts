@@ -22,6 +22,10 @@ export interface FixedDepositAccount {
   maturityDate: string;
   maturityAmount: number;
   currency: string;
+  /** How interest is paid out during the FD term */
+  payoutFrequency: 'monthly' | 'quarterly' | 'on_maturity';
+  /** Whether the FD automatically renews at maturity for the same tenure */
+  autoRenew?: boolean;
 }
 
 export interface HomeLoanAccount {
@@ -39,4 +43,20 @@ export interface HomeLoanAccount {
   currency: string;
 }
 
-export type Account = SavingsAccount | FixedDepositAccount | HomeLoanAccount;
+export interface PersonalLoanAccount {
+  id: string;
+  type: 'personal_loan';
+  accountNumber: string;
+  name: string;
+  purpose: string;
+  sanctionedAmount: number;
+  outstandingAmount: number;
+  interestRate: number;
+  tenureMonths: number;
+  elapsedMonths: number;
+  emi: number;
+  nextEmiDate: string;
+  currency: string;
+}
+
+export type Account = SavingsAccount | FixedDepositAccount | HomeLoanAccount | PersonalLoanAccount;

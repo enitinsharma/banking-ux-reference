@@ -5,7 +5,7 @@ import { SavingsCard } from '@/components/accounts/SavingsCard';
 import { FixedDepositsSection } from '@/components/accounts/FixedDepositsSection';
 import { LoansSection } from '@/components/accounts/LoansSection';
 import { useAccounts } from '@/lib/hooks/useAccounts';
-import type { FixedDepositAccount, HomeLoanAccount } from '@/types/account';
+import type { FixedDepositAccount, HomeLoanAccount, PersonalLoanAccount } from '@/types/account';
 
 /* ── Skeleton ─────────────────────────────────────────── */
 function CardSkeleton() {
@@ -44,9 +44,11 @@ function CardSkeleton() {
 export default function AccountsPage() {
   const { accounts, loading, error } = useAccounts();
 
-  const savings      = accounts.find(a => a.type === 'savings');
+  const savings       = accounts.find(a => a.type === 'savings');
   const fixedDeposits = accounts.filter(a => a.type === 'fixed_deposit') as FixedDepositAccount[];
-  const loans        = accounts.filter(a => a.type === 'home_loan') as HomeLoanAccount[];
+  const loans         = accounts.filter(
+    a => a.type === 'home_loan' || a.type === 'personal_loan',
+  ) as (HomeLoanAccount | PersonalLoanAccount)[];
 
   return (
     <div className="space-y-6">
