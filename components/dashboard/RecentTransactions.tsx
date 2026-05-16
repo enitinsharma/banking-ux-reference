@@ -17,6 +17,7 @@ import {
 import { useTransactions } from '@/lib/hooks/useTransactions';
 import { formatDate } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import { Amount } from '@/components/ui/Amount';
 import type { TransactionCategory } from '@/types/transaction';
 
 /* ── Category metadata ────────────────────────────────── */
@@ -107,13 +108,14 @@ export function RecentTransactions() {
                 </div>
 
                 {/* Amount */}
-                <span className={cn(
-                  'shrink-0 text-sm font-semibold tabular-nums',
-                  isCredit ? 'text-emerald-600' : 'text-content-primary',
-                )}>
-                  {isCredit ? '+' : '−'}
-                  ₹{txn.amount.toLocaleString('en-IN')}
-                </span>
+                <Amount
+                  value={txn.amount}
+                  prefix={isCredit ? '+' : '−'}
+                  className={cn(
+                    'shrink-0 text-sm font-semibold tabular-nums',
+                    isCredit ? 'text-emerald-600' : 'text-content-primary',
+                  )}
+                />
               </li>
             );
           })}

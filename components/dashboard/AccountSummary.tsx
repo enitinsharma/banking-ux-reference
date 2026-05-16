@@ -5,6 +5,7 @@ import { Home, Landmark, Lock } from 'lucide-react';
 import { useAccounts } from '@/lib/hooks/useAccounts';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import { Amount } from '@/components/ui/Amount';
 import type { Account } from '@/types/account';
 
 /* ── Progress bar ─────────────────────────────────────── */
@@ -33,10 +34,10 @@ function AccountRow({ account }: { account: Account }) {
         </div>
         <div className="text-right">
           <p className="text-sm font-semibold text-content-primary">
-            {formatCurrency(account.balance)}
+            <Amount value={account.balance} />
           </p>
           <p className="text-xs text-content-secondary">
-            Avail. {formatCurrency(account.availableBalance)}
+            Avail. <Amount value={account.availableBalance} />
           </p>
         </div>
       </div>
@@ -57,7 +58,7 @@ function AccountRow({ account }: { account: Account }) {
           </div>
           <div className="text-right">
             <p className="text-sm font-semibold text-content-primary">
-              {formatCurrency(account.principal)}
+              <Amount value={account.principal} />
             </p>
             <p className="text-xs text-content-secondary">
               Matures {formatDate(account.maturityDate)}
@@ -89,7 +90,7 @@ function AccountRow({ account }: { account: Account }) {
           </div>
           <div className="text-right">
             <p className="text-sm font-semibold text-content-primary">
-              {formatCurrency(account.outstandingAmount)}
+              <Amount value={account.outstandingAmount} />
             </p>
             <p className="text-xs text-content-secondary">outstanding</p>
           </div>
@@ -97,7 +98,7 @@ function AccountRow({ account }: { account: Account }) {
         <div className="pl-12">
           <ProgressBar value={progress} className="bg-amber-500" />
           <p className="mt-1 text-right text-[11px] text-content-secondary">
-            EMI {formatCurrency(account.emi)} · due {formatDate(account.nextEmiDate)}
+            EMI <Amount value={account.emi} /> · due {formatDate(account.nextEmiDate)}
           </p>
         </div>
       </div>

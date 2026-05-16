@@ -4,7 +4,7 @@ import { Star, Target, TrendingDown, Wallet } from 'lucide-react';
 import { useAccounts } from '@/lib/hooks/useAccounts';
 import { useTransactions } from '@/lib/hooks/useTransactions';
 import { useRewards } from '@/lib/hooks/useRewards';
-import { formatCurrency } from '@/lib/utils';
+import { Amount } from '@/components/ui/Amount';
 import { StatCard } from './StatCard';
 
 function Skeleton() {
@@ -54,7 +54,7 @@ export function DashboardStats() {
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <StatCard
         label="Total Balance"
-        value={formatCurrency(balance)}
+        value={<Amount value={balance} />}
         sub="Savings account"
         icon={Wallet}
         iconClassName="bg-blue-50 text-blue-600"
@@ -62,7 +62,7 @@ export function DashboardStats() {
       />
       <StatCard
         label="Monthly Spend"
-        value={formatCurrency(monthlySpend)}
+        value={<Amount value={monthlySpend} />}
         sub={monthName}
         icon={TrendingDown}
         iconClassName="bg-rose-50 text-rose-600"

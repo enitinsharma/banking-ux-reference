@@ -35,7 +35,14 @@ const actions = [
 
 export function QuickActions() {
   return (
-    <div className="rounded-xl border border-ui-border bg-brand-card p-5">
+    // bg-brand-page creates an inset tray; tiles use bg-brand-card (always a
+    // distinct surface colour) so they visibly lift above it with shadow-sm.
+    // Theme values:
+    //   Aurum       page=#fef9f0  card=#ffffff  → cream tray, white tiles
+    //   Arctic      page=#f1f5f9  card=#ffffff  → slate tray, white tiles
+    //   Meridian    page=#0d1b2a  card=#132035  → deep navy tray, lighter tiles
+    //   Forest      page=#f0fdf4  card=#ffffff  → mint tray, white tiles
+    <div className="rounded-xl border border-ui-border bg-brand-page p-5">
       <h2 className="mb-4 text-base font-semibold text-content-primary">Quick Actions</h2>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {actions.map(({ label, icon: Icon, href, iconClassName, ringClassName }) => (
@@ -43,8 +50,9 @@ export function QuickActions() {
             key={href}
             href={href}
             className={cn(
-              'flex flex-col items-center gap-2.5 rounded-xl border border-ui-border p-4',
-              'transition-all duration-150 hover:border-transparent hover:ring-2',
+              'flex flex-col items-center gap-2.5 rounded-xl bg-brand-card p-4',
+              'shadow-sm transition-all duration-200',
+              'hover:shadow-md hover:ring-2',
               ringClassName,
             )}
           >

@@ -1,3 +1,4 @@
+import { type ReactNode } from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { LucideIcon } from 'lucide-react';
@@ -11,7 +12,7 @@ interface Trend {
 
 interface StatCardProps {
   label: string;
-  value: string;
+  value: ReactNode;
   sub: string;
   icon: LucideIcon;
   /** Tailwind classes for the icon container, e.g. "bg-blue-50 text-blue-600" */
