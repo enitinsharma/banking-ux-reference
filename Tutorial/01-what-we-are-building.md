@@ -1,16 +1,31 @@
 # 01 — What We Are Building
 
-## The Application: NovaBank
+## The Application
 
-NovaBank is a **reference online banking application** built to demonstrate how a modern, production-grade banking UI can be architected using a pure front-end stack. There is no real backend — a mock API layer intercepts every network call in the browser, making the app fully self-contained and runnable from a single `npm run dev`.
+This is a **reference online banking application** built to demonstrate how a modern, production-grade banking UI can be architected using a pure front-end stack. There is no real backend — a mock API layer intercepts every network call in the browser, making the app fully self-contained and runnable from a single `npm run dev`.
 
-The goal is not a toy demo. Every design decision reflects choices you would make in a real banking product: multi-tenant theming, strict TypeScript domain models, accessible components, and a clear separation between UI, data-fetching, and mock infrastructure.
+The goal is not a toy demo. Every design decision reflects choices you would make in a real banking product: multi-tenant theming, per-tenant brand identity, strict TypeScript domain models, accessible components, and a clear separation between UI, data-fetching, and mock infrastructure.
+
+---
+
+## Four Banks, One Codebase
+
+One of the core showcases of this project is that it ships as **four completely separate bank brands** — all from the same codebase, with zero component-level changes between them. Selecting a theme from the sidebar switcher changes the entire visual identity instantly.
+
+| Theme | Bank Name | Personality | Logo Scene |
+|-------|-----------|-------------|------------|
+| **Arctic White** | NovaBank | Clean, bright, trustworthy | Aurora borealis over a snow-capped mountain |
+| **Midnight Navy** | Meridian | Premium, deep, authoritative | Sailing ship on moonlit waters under a crescent moon |
+| **Forest Green** | Verdant | Natural, ethical, growth | Twin pine trees at dawn with a rising sun |
+| **Warm Sandstone** | Aurum | Heritage, warmth, prestige | Desert sunset with sand dunes and a rock arch |
+
+Each theme carries its own `bankName`, `legalName`, illustrated SVG logo, and full set of CSS colour variables. The selection persists in `localStorage` so it survives page refreshes.
 
 ---
 
 ## What the App Does
 
-NovaBank has seven pages, each covering a core retail banking workflow:
+The app has seven pages, each covering a core retail banking workflow:
 
 | Page | What It Shows |
 |------|--------------|
@@ -39,7 +54,9 @@ Playwright                 — end-to-end tests against the running dev server
 
 **Why MSW?** Banking APIs are complex and unavailable during UI development. MSW intercepts `fetch` at the Service Worker level, returning realistic mock data for every domain (accounts, transactions, transfers, service requests, rewards). The same handler files power unit tests via the MSW Node server — one source of truth for all mock data.
 
-**Why CSS custom properties for theming?** The app supports four visual themes (Arctic White, Midnight Navy, Forest Green, Warm Sandstone). With CSS variables declared per `[data-theme]` selector, switching a theme requires changing a single attribute on `<html>`. No component re-renders, no style prop overrides, no CSS-in-JS overhead.
+The app is also deployed to Vercel as a public demo. MSW runs in production too, so visitors see live, realistic data with no backend required. Any browser that supports Service Workers (which is all modern browsers) gets the full experience.
+
+**Why CSS custom properties for theming?** The app supports four visual themes. With CSS variables declared per `[data-theme]` selector, switching a theme requires changing a single attribute on `<html>`. No component re-renders, no style prop overrides, no CSS-in-JS overhead. The same Tailwind utility class (`bg-accent`, `text-content-primary`, etc.) automatically resolves to the right colour for whichever bank brand is active.
 
 ---
 
@@ -66,7 +83,7 @@ All banking pages live inside the `app/(banking)/` route group. The parentheses 
 app/
   layout.tsx              Root layout — sets fonts, loads globals.css, mounts MSWProvider
   page.tsx                Redirects / → /dashboard
-  MSWProvider.tsx         Client component — starts the MSW browser worker in development
+  MSWProvider.tsx         Client component — starts MSW worker (all environments)
   (banking)/
     layout.tsx            Route group layout — wraps all pages in <Shell>
     dashboard/page.tsx
@@ -79,10 +96,10 @@ app/
 
 components/
   ui/                     Button, Input, Select, Badge, Panel
-  layout/                 Shell, Header, Sidebar, Footer, PageHeader
+  layout/                 Shell, Header, Sidebar, Footer, ThemeLogo, PageHeader
 
 lib/
-  themes/                 4 theme config objects + index barrel
+  themes/                 4 theme config objects (id, bankName, legalName, vars) + index barrel
   hooks/                  useTheme, useAccounts, useTransactions
   api/                    Typed fetch wrapper (api.accounts.list(), etc.)
   utils.ts                cn() for class merging, formatCurrency(), formatDate()
@@ -94,7 +111,6 @@ mocks/
 
 types/                    account, transaction, transfer, request, rewards, themes
 
-docs/                     ADRs and wiki (written before implementation)
 Tutorial/                 This tutorial series
 ```
 
@@ -104,12 +120,12 @@ Tutorial/                 This tutorial series
 
 One of the architectural showcases of this project is multi-tenant theming. All four themes are selectable at runtime via the sidebar theme switcher, and the selection persists in `localStorage`.
 
-| Theme | Accent | Header | Sidebar |
-|-------|--------|--------|---------|
-| **Arctic White** (default) | `#2563eb` (blue) | `#1e3a5f` (dark navy) | `#f8faff` (near-white) |
-| **Midnight Navy** | `#3b82f6` (blue) | `#0a1628` (deepest navy) | `#0f1e35` (dark) |
-| **Forest Green** | `#16a34a` (green) | `#14532d` (dark green) | `#f0fdf4` (light green-tint) |
-| **Warm Sandstone** | `#b45309` (amber) | `#78350f` (dark brown) | `#fdf8f0` (warm off-white) |
+| Theme | Bank | Accent | Header | Sidebar |
+|-------|------|--------|--------|---------|
+| **Arctic White** | NovaBank | `#2563eb` (blue) | `#1e3a5f` (dark navy) | `#f8faff` (near-white) |
+| **Midnight Navy** | Meridian | `#3b82f6` (blue) | `#0a1628` (deepest navy) | `#0f1e35` (dark) |
+| **Forest Green** | Verdant | `#16a34a` (green) | `#14532d` (dark green) | `#f0fdf4` (light green tint) |
+| **Warm Sandstone** | Aurum | `#b45309` (amber) | `#78350f` (dark brown) | `#fdf8f0` (warm off-white) |
 
 ---
 
