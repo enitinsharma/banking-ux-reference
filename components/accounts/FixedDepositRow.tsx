@@ -56,6 +56,9 @@ export function FixedDepositRow({ account }: Props) {
                 <span className="mx-1 font-normal text-content-secondary">→</span>
                 <span className="text-violet-600">{formatCurrency(account.maturityAmount)}</span>
               </p>
+              <p className="mt-0.5 text-xs font-medium text-emerald-600">
+                +{formatCurrency(account.maturityAmount - account.principal)} interest
+              </p>
               <p className="mt-0.5 text-xs text-content-secondary">
                 Matures {formatDate(account.maturityDate)}
               </p>
