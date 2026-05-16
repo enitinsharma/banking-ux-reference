@@ -20,6 +20,49 @@ function ProgressBar({ value }: { value: number }) {
   );
 }
 
+/** Right-side amount block — differs by payout frequency */
+function AmountBlock({ account }: { account: FixedDepositAccount }) {
+  const totalInterest = account.maturityAmount - account.principal;
+
+  if (account.payoutFrequency === 'on_maturity') {
+    return (
+      <div className="text-right">
+        <p className="text-sm font-semibold text-content-primary">
+          {formatCurrency(account.principal)}
+          <span className="mx-1 font-normal text-content-secondary">→</span>
+          <span className="text-violet-600">{formatCurrency(account.maturityAmount)}</span>
+        </p>
+        <p className="mt-0.5 text-xs font-medium text-emerald-600">
+          +{formatCurrency(totalInterest)} interest
+        </p>
+        <p className="mt-0.5 text-xs text-content-secondary">
+          Matures {formatDate(account.maturityDate)}
+        </p>
+      </div>
+    );
+  }
+
+  // Monthly / quarterly — interest is paid out periodically; principal returned at maturity
+  const divisor = account.payoutFrequency === 'monthly' ? 12 : 4;
+  const periodLabel = account.payoutFrequency === 'monthly' ? 'mo' : 'qtr';
+  const periodicPayout = Math.round((account.principal * account.interestRate) / 100 / divisor);
+
+  return (
+    <div className="text-right">
+      <p className="text-sm font-semibold text-content-primary">
+        {formatCurrency(account.principal)}
+        <span className="ml-1 text-xs font-normal text-content-secondary">principal</span>
+      </p>
+      <p className="mt-0.5 text-xs font-medium text-emerald-600">
+        {formatCurrency(periodicPayout)}/{periodLabel} · +{formatCurrency(totalInterest)} total
+      </p>
+      <p className="mt-0.5 text-xs text-content-secondary">
+        Matures {formatDate(account.maturityDate)}
+      </p>
+    </div>
+  );
+}
+
 interface Props { account: FixedDepositAccount }
 
 export function FixedDepositRow({ account }: Props) {
@@ -36,7 +79,7 @@ export function FixedDepositRow({ account }: Props) {
 
         {/* Details */}
         <div className="min-w-0 flex-1">
-          {/* Top row — rate / account no. on left, amounts on right */}
+          {/* Top row */}
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div>
               <p className="text-sm font-semibold text-content-primary">
@@ -50,22 +93,10 @@ export function FixedDepositRow({ account }: Props) {
               </p>
             </div>
 
-            <div className="text-right">
-              <p className="text-sm font-semibold text-content-primary">
-                {formatCurrency(account.principal)}
-                <span className="mx-1 font-normal text-content-secondary">→</span>
-                <span className="text-violet-600">{formatCurrency(account.maturityAmount)}</span>
-              </p>
-              <p className="mt-0.5 text-xs font-medium text-emerald-600">
-                +{formatCurrency(account.maturityAmount - account.principal)} interest
-              </p>
-              <p className="mt-0.5 text-xs text-content-secondary">
-                Matures {formatDate(account.maturityDate)}
-              </p>
-            </div>
+            <AmountBlock account={account} />
           </div>
 
-          {/* Badges — payout frequency + auto-renew */}
+          {/* Badges */}
           <div className="mt-2 flex flex-wrap items-center gap-1.5">
             <span className="rounded-full border border-ui-border px-2 py-0.5 text-[11px] text-content-secondary">
               {PAYOUT_LABEL[account.payoutFrequency]}
