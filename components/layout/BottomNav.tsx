@@ -14,7 +14,16 @@ import {
   SendHorizontal,
   X,
 } from 'lucide-react';
+import { useTheme } from '@/lib/hooks/useTheme';
 import { cn } from '@/lib/utils';
+import type { ThemeId } from '@/types/themes';
+
+const themeSwatches: Record<ThemeId, string> = {
+  'arctic-white':   'bg-blue-600',
+  'midnight-navy':  'bg-slate-800',
+  'forest-green':   'bg-green-700',
+  'warm-sandstone': 'bg-amber-700',
+};
 
 const primaryTabs = [
   { href: '/dashboard',    label: 'Home',     icon: LayoutDashboard },
@@ -32,6 +41,7 @@ const moreTabs = [
 export function BottomNav() {
   const pathname = usePathname();
   const [moreOpen, setMoreOpen] = useState(false);
+  const { theme, themes, setTheme } = useTheme();
 
   const moreActive = moreTabs.some(
     t => pathname === t.href || pathname.startsWith(`${t.href}/`),
@@ -73,8 +83,8 @@ export function BottomNav() {
           </button>
         </div>
 
-        {/* pb-16 = height of the tab bar underneath */}
-        <ul className="divide-y divide-ui-border border-t border-ui-border px-3 pb-16 pt-1">
+        {/* Nav links */}
+        <ul className="divide-y divide-ui-border border-t border-ui-border px-3 pt-1">
           {moreTabs.map(({ href, label, icon: Icon }) => {
             const active = pathname === href || pathname.startsWith(`${href}/`);
             return (
@@ -96,6 +106,27 @@ export function BottomNav() {
             );
           })}
         </ul>
+
+        {/* ── Theme switcher ── */}
+        <div className="border-t border-ui-border px-5 pb-20 pt-4">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-content-secondary">
+            Theme
+          </p>
+          <div className="flex gap-3">
+            {themes.map(t => (
+              <button
+                key={t.id}
+                title={t.name}
+                onClick={() => setTheme(t.id)}
+                className={cn(
+                  'h-7 w-7 rounded-full transition-transform hover:scale-110',
+                  themeSwatches[t.id],
+                  theme.id === t.id && 'ring-2 ring-accent ring-offset-2',
+                )}
+              />
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* ── Tab bar ── */}

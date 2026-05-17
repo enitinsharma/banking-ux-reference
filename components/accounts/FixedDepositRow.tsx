@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Lock } from 'lucide-react';
 import { formatCurrency, formatCurrencyCompact, formatDate } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
@@ -12,10 +13,15 @@ const PAYOUT_LABEL: Record<FixedDepositAccount['payoutFrequency'], string> = {
 };
 
 /* ── Toggle switch ────────────────────────────────────────── */
-function Toggle({ checked, label }: { checked: boolean; label: string }) {
+function Toggle({ checked, onChange, label }: { checked: boolean; onChange: () => void; label: string }) {
   return (
     <label className="flex cursor-pointer items-center gap-2">
-      <div className={`relative h-4 w-7 rounded-full transition-colors ${checked ? 'bg-violet-500' : 'bg-gray-300'}`}>
+      <div
+        role="switch"
+        aria-checked={checked}
+        onClick={onChange}
+        className={`relative h-4 w-7 rounded-full transition-colors ${checked ? 'bg-violet-500' : 'bg-gray-300'}`}
+      >
         <div className={`absolute top-0.5 h-3 w-3 rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-3' : 'translate-x-0.5'}`} />
       </div>
       <span className="text-xs text-content-secondary">{label}</span>
@@ -97,6 +103,8 @@ function AmountBlock({ account }: { account: FixedDepositAccount }) {
 interface Props { account: FixedDepositAccount }
 
 export function FixedDepositRow({ account }: Props) {
+  const [autoRenew, setAutoRenew] = useState(!!account.autoRenew);
+
   const progress    = Math.round((account.tenureElapsed / account.tenure) * 100);
   const monthsLeft  = account.tenure - account.tenureElapsed;
   const nearMaturity = monthsLeft <= 3;
@@ -148,21 +156,20 @@ export function FixedDepositRow({ account }: Props) {
           <div className="mt-3 space-y-2">
             {/* Toggle — same for all FDs regardless of maturity stage */}
             <Toggle
-              checked={!!account.autoRenew}
+              checked={autoRenew}
+              onChange={() => setAutoRenew(v => !v)}
               label="Auto-renew on maturity"
             />
 
-            {/* Contextual message — only shown near maturity */}
-            {nearMaturity && (
-              account.autoRenew ? (
-                <p className="text-[11px] text-emerald-600">
-                  Will renew automatically for {account.tenure} months on {formatDate(account.maturityDate)}
-                </p>
-              ) : (
-                <p className="text-[11px] text-amber-600">
-                  Amount will be credited to your savings account in {monthsLeft} month{monthsLeft !== 1 ? 's' : ''}
-                </p>
-              )
+            {/* Renewal message — always visible */}
+            {autoRenew ? (
+              <p className="text-[11px] text-emerald-600">
+                Will renew automatically for {account.tenure} months on {formatDate(account.maturityDate)}
+              </p>
+            ) : (
+              <p className="text-[11px] text-amber-600">
+                Amount will be credited to your savings account on {formatDate(account.maturityDate)}
+              </p>
             )}
 
             {/* Secondary actions */}
