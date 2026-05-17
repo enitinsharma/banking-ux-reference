@@ -6,6 +6,7 @@ import { Header } from './Header';
 import { Sidebar } from './Sidebar';
 import { Footer } from './Footer';
 import { BottomNav } from './BottomNav';
+import { IosInstallBanner } from './IosInstallBanner';
 
 export function Shell({ children }: { children: ReactNode }) {
   return (
@@ -26,6 +27,9 @@ export function Shell({ children }: { children: ReactNode }) {
 
       {/* Bottom tab bar — mobile only */}
       <BottomNav />
+
+      {/* iOS install hint — shown only on iPhone/iPad Safari, not when already installed */}
+      <IosInstallBanner />
     </ThemeProvider>
   );
 }
