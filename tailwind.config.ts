@@ -30,6 +30,15 @@ const config: Config = {
         sans: ["var(--font-geist-sans)", "Arial", "Helvetica", "sans-serif"],
         mono: ["var(--font-geist-mono)", "monospace"],
       },
+      keyframes: {
+        'scan-line': {
+          '0%, 100%': { top: '12px' },
+          '50%': { top: 'calc(100% - 14px)' },
+        },
+      },
+      animation: {
+        'scan-line': 'scan-line 2s ease-in-out infinite',
+      },
     },
   },
   plugins: [],
