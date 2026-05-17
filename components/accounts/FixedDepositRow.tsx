@@ -160,7 +160,7 @@ export function FixedDepositRow({ account }: Props) {
                 </p>
               ) : (
                 <p className="text-[11px] text-amber-600">
-                  ₹{formatCurrencyCompact(account.maturityAmount)} will be credited to your savings account in {monthsLeft} month{monthsLeft !== 1 ? 's' : ''}
+                  Amount will be credited to your savings account in {monthsLeft} month{monthsLeft !== 1 ? 's' : ''}
                 </p>
               )
             )}
