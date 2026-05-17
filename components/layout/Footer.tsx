@@ -28,7 +28,7 @@ export function Footer() {
             </a>
           ))}
         </div>
-        <p className="whitespace-nowrap text-xs text-content-secondary">
+        <p className="text-xs text-content-secondary">
           © 2026 {theme.legalName} All rights reserved.
         </p>
       </div>
