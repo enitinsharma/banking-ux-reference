@@ -5,7 +5,7 @@ import { SavingsCard } from '@/components/accounts/SavingsCard';
 import { FixedDepositsSection } from '@/components/accounts/FixedDepositsSection';
 import { LoansSection } from '@/components/accounts/LoansSection';
 import { useAccounts } from '@/lib/hooks/useAccounts';
-import type { FixedDepositAccount, HomeLoanAccount, PersonalLoanAccount } from '@/types/account';
+import type { SavingsAccount, FixedDepositAccount, HomeLoanAccount, PersonalLoanAccount } from '@/types/account';
 
 /* ── Skeleton ─────────────────────────────────────────── */
 function CardSkeleton() {
@@ -44,7 +44,7 @@ function CardSkeleton() {
 export default function AccountsPage() {
   const { accounts, loading, error } = useAccounts();
 
-  const savings       = accounts.find(a => a.type === 'savings');
+  const savings       = accounts.filter(a => a.type === 'savings') as SavingsAccount[];
   const fixedDeposits = accounts.filter(a => a.type === 'fixed_deposit') as FixedDepositAccount[];
   const loans         = accounts.filter(
     a => a.type === 'home_loan' || a.type === 'personal_loan',
@@ -78,7 +78,7 @@ export default function AccountsPage() {
       {/* ── Content ── */}
       {!loading && !error && (
         <div className="space-y-6">
-          {savings         && <SavingsCard           account={savings} />}
+          {savings.map(s => <SavingsCard key={s.id} account={s} />)}
           {fixedDeposits.length > 0 && <FixedDepositsSection accounts={fixedDeposits} />}
           {loans.length > 0         && <LoansSection         accounts={loans} />}
         </div>

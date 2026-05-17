@@ -8,6 +8,16 @@ export interface SavingsAccount {
   currency: string;
   ifsc: string;
   branch: string;
+  /** Annual interest rate on the savings balance */
+  interestRate: number;
+  /** Whether this is a joint account */
+  isJoint?: boolean;
+  /** Full name of the joint account holder */
+  jointHolderName?: string;
+  /** Amount withheld from available balance, if any */
+  holdAmount?: number;
+  /** Human-readable reason for the hold, e.g. "UPI payment pending" */
+  holdReason?: string;
 }
 
 export interface FixedDepositAccount {

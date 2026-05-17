@@ -40,7 +40,7 @@ export function PersonalLoanRow({ account }: Props) {
           <div className="flex items-start justify-between gap-2">
             <div>
               <p className="text-sm font-semibold text-content-primary">
-                {account.interestRate}% p.a.
+                {account.interestRate}%
                 <span className="ml-1.5 font-normal text-content-secondary">
                   · {account.tenureMonths}mo
                 </span>

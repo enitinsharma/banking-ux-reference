@@ -11,13 +11,15 @@ function DetailRow({
   label,
   value,
   copyValue,
+  className,
 }: {
   label: string;
   value: string;
   copyValue?: string;
+  className?: string;
 }) {
   return (
-    <div className="flex items-center justify-between py-2.5">
+    <div className={`flex items-center justify-between py-2.5 ${className ?? ''}`}>
       <span className="text-xs text-content-secondary">{label}</span>
       <div className="flex items-center gap-1.5">
         <span className="font-mono text-sm text-content-primary">{value}</span>
@@ -36,17 +38,28 @@ export function SavingsCard({ account }: Props) {
       <div className="p-6">
         {/* ── Header ── */}
         <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-start gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
               <Landmark className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-content-secondary">
-                Savings Account
-              </p>
-              <p className="text-sm font-semibold text-content-primary">
-                {account.name}
-              </p>
+              <div className="flex items-center gap-1.5">
+                <p className="text-xs font-medium uppercase tracking-wide text-content-secondary">
+                  Savings Account
+                </p>
+                {account.isJoint && (
+                  <span className="rounded-full bg-blue-50 px-1.5 py-0.5 text-[10px] font-medium text-blue-600">
+                    Joint
+                  </span>
+                )}
+              </div>
+              {account.isJoint && account.jointHolderName && (
+                <p className="mt-0.5 text-sm text-content-secondary">
+                  with{' '}
+                  <span className="sm:hidden">{account.jointHolderName.split(' ')[0]}</span>
+                  <span className="hidden sm:inline">{account.jointHolderName}</span>
+                </p>
+              )}
             </div>
           </div>
           <span className="rounded-full border border-ui-border px-2.5 py-1 font-mono text-xs text-content-secondary">
@@ -55,21 +68,21 @@ export function SavingsCard({ account }: Props) {
         </div>
 
         {/* ── Balance ── */}
-        <div className="mt-6 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-content-secondary">
-              Total Balance
+        <div className="mt-6">
+          <p className="text-xs font-medium uppercase tracking-wide text-content-secondary">
+            Available Balance
+          </p>
+          <p className="mt-1 text-3xl font-bold tracking-tight text-content-primary">
+            {formatCurrency(account.availableBalance)}
+          </p>
+          <p className="mt-1 text-xs text-content-secondary">
+            @ {account.interestRate}% p.a.
+          </p>
+          {account.holdAmount ? (
+            <p className="mt-1 text-xs text-amber-600">
+              {formatCurrency(account.holdAmount)} on hold · {account.holdReason}
             </p>
-            <p className="mt-1 text-3xl font-bold tracking-tight text-content-primary">
-              {formatCurrency(account.balance)}
-            </p>
-          </div>
-          <div className="rounded-lg bg-brand-page px-4 py-2 text-right">
-            <p className="text-xs text-content-secondary">Available Balance</p>
-            <p className="mt-0.5 text-lg font-semibold text-content-primary">
-              {formatCurrency(account.availableBalance)}
-            </p>
-          </div>
+          ) : null}
         </div>
 
         {/* ── Account details ── */}
@@ -87,6 +100,7 @@ export function SavingsCard({ account }: Props) {
           <DetailRow
             label="Branch"
             value={account.branch}
+            className="hidden sm:flex"
           />
         </div>
 
