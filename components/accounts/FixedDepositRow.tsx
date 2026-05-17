@@ -36,12 +36,14 @@ function AmountBlock({ account }: { account: FixedDepositAccount }) {
           +{formatCurrency(totalInterest)} interest
         </p>
 
-        {/* Mobile: compact maturity amount only */}
-        <p className="text-sm font-semibold text-violet-600 sm:hidden">
-          {formatCurrencyCompact(account.maturityAmount)}
+        {/* Mobile: compact principal → maturity so the arrow clarifies both numbers */}
+        <p className="text-sm font-semibold text-content-primary sm:hidden">
+          {formatCurrencyCompact(account.principal)}
+          <span className="mx-1 font-normal text-content-secondary">→</span>
+          <span className="text-violet-600">{formatCurrencyCompact(account.maturityAmount)}</span>
         </p>
         <p className="text-xs font-medium text-emerald-600 sm:hidden">
-          +{formatCurrencyCompact(totalInterest)}
+          +{formatCurrencyCompact(totalInterest)} interest
         </p>
 
         <p className="mt-0.5 text-xs text-content-secondary">
@@ -67,12 +69,13 @@ function AmountBlock({ account }: { account: FixedDepositAccount }) {
         {formatCurrency(periodicPayout)}/{periodLabel} · +{formatCurrency(totalInterest)} total
       </p>
 
-      {/* Mobile: periodic payout is the key number */}
+      {/* Mobile: principal labelled + periodic payout */}
       <p className="text-sm font-semibold text-content-primary sm:hidden">
         {formatCurrencyCompact(account.principal)}
+        <span className="ml-1 text-xs font-normal text-content-secondary">deposit</span>
       </p>
       <p className="text-xs font-medium text-emerald-600 sm:hidden">
-        {formatCurrencyCompact(periodicPayout)}/{periodLabel}
+        {formatCurrencyCompact(periodicPayout)}/{periodLabel} payout
       </p>
 
       <p className="mt-0.5 text-xs text-content-secondary">
