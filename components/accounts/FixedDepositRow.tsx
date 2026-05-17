@@ -59,7 +59,7 @@ function AmountBlock({ account }: { account: FixedDepositAccount }) {
           +{formatCurrencyCompact(totalInterest)} interest
         </p>
         <p className="mt-0.5 text-xs text-content-secondary">
-          Matures {formatDate(account.maturityDate)}
+          {formatDate(account.startDate)} → {formatDate(account.maturityDate)}
         </p>
       </div>
     );
@@ -87,7 +87,7 @@ function AmountBlock({ account }: { account: FixedDepositAccount }) {
         {formatCurrencyCompact(periodicPayout)}/{periodLabel} payout
       </p>
       <p className="mt-0.5 text-xs text-content-secondary">
-        Matures {formatDate(account.maturityDate)}
+        {formatDate(account.startDate)} → {formatDate(account.maturityDate)}
       </p>
     </div>
   );
@@ -113,7 +113,7 @@ export function FixedDepositRow({ account }: Props) {
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div>
               <p className="text-sm font-semibold text-content-primary">
-                {account.interestRate}% p.a.
+                {account.interestRate}%
                 <span className="ml-1.5 font-normal text-content-secondary">· {account.tenure}mo</span>
               </p>
               <p className="mt-0.5 font-mono text-xs text-content-secondary">

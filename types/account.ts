@@ -29,6 +29,7 @@ export interface FixedDepositAccount {
   interestRate: number;
   tenure: number;
   tenureElapsed: number;
+  startDate: string;
   maturityDate: string;
   maturityAmount: number;
   currency: string;

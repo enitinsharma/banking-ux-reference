@@ -36,23 +36,21 @@ export function HomeLoanCard({ account }: Props) {
 
       <div className="p-6">
         {/* ── Header ── */}
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
-              <Home className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-content-secondary">
-                Home Loan
-              </p>
-              <p className="text-sm font-semibold text-content-primary">
-                {account.interestRate}% p.a. · {tenureYears}-year tenure
-              </p>
-            </div>
+        <div className="flex items-start gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
+            <Home className="h-5 w-5" />
           </div>
-          <span className="rounded-full border border-ui-border px-2.5 py-1 font-mono text-xs text-content-secondary">
-            ···· {account.accountNumber.slice(-4)}
-          </span>
+          <div>
+            <p className="text-xs font-medium uppercase tracking-wide text-content-secondary">
+              Home Loan
+            </p>
+            <p className="mt-0.5 font-mono text-sm font-semibold text-content-primary">
+              {account.accountNumber}
+            </p>
+            <p className="mt-0.5 text-sm text-content-secondary">
+              {account.interestRate}% · {tenureYears}-year tenure
+            </p>
+          </div>
         </div>
 
         {/* ── Outstanding + original ── */}
@@ -117,7 +115,7 @@ export function HomeLoanCard({ account }: Props) {
             <Button variant="primary" size="sm">Pre-pay</Button>
           </Link>
           <Button variant="secondary" size="sm">Download Statement</Button>
-          <Button variant="ghost" size="sm">Loan Details</Button>
+          <Button variant="secondary" size="sm">Loan Details</Button>
         </div>
       </div>
     </div>

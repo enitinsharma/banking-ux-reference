@@ -28,7 +28,7 @@ export function FixedDepositCard({ account }: Props) {
       <div className="p-6">
         {/* ── Header ── */}
         <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-start gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-50 text-violet-600">
               <Lock className="h-5 w-5" />
             </div>
@@ -37,7 +37,7 @@ export function FixedDepositCard({ account }: Props) {
                 Fixed Deposit
               </p>
               <p className="text-sm font-semibold text-content-primary">
-                {account.interestRate}% p.a. · {account.tenure} months
+                {account.interestRate}% · {account.tenure} months
               </p>
             </div>
           </div>
@@ -63,12 +63,18 @@ export function FixedDepositCard({ account }: Props) {
           </div>
         </div>
 
-        {/* ── Interest earned + maturity date ── */}
+        {/* ── Interest earned + dates + account no. ── */}
         <div className="mt-4 flex flex-wrap gap-4">
           <div>
             <p className="text-xs text-content-secondary">Interest Earned</p>
             <p className="mt-0.5 text-sm font-semibold text-emerald-600">
               +{formatCurrency(interestEarned)}
+            </p>
+          </div>
+          <div>
+            <p className="text-xs text-content-secondary">Start Date</p>
+            <p className="mt-0.5 text-sm font-semibold text-content-primary">
+              {formatDate(account.startDate)}
             </p>
           </div>
           <div>
@@ -99,8 +105,8 @@ export function FixedDepositCard({ account }: Props) {
         {/* ── Actions ── */}
         <div className="mt-5 flex flex-wrap gap-3">
           <Button variant="primary" size="sm">Renew FD</Button>
-          <Button variant="secondary" size="sm">Premature Withdrawal</Button>
-          <Button variant="ghost" size="sm">Download Advice</Button>
+          <Button variant="secondary" size="sm">Withdraw Early</Button>
+          <Button variant="secondary" size="sm">Download Advice</Button>
         </div>
       </div>
     </div>

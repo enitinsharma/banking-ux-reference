@@ -54,7 +54,7 @@ function AccountRow({ account }: { account: Account }) {
           </div>
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-content-primary">Fixed Deposit</p>
-            <p className="text-xs text-content-secondary">{account.interestRate}% p.a.</p>
+            <p className="text-xs text-content-secondary">{account.interestRate}%</p>
           </div>
           <div className="text-right">
             <p className="text-sm font-semibold text-content-primary">
@@ -86,7 +86,7 @@ function AccountRow({ account }: { account: Account }) {
           </div>
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-content-primary">Home Loan</p>
-            <p className="text-xs text-content-secondary">{account.interestRate}% p.a.</p>
+            <p className="text-xs text-content-secondary">{account.interestRate}%</p>
           </div>
           <div className="text-right">
             <p className="text-sm font-semibold text-content-primary">

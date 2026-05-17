@@ -41,6 +41,7 @@ const accounts: Account[] = [
     tenure: 24,
     tenureElapsed: 11,
     // 24-month FD, 11 months elapsed → 13 months remaining
+    startDate: monthsFromNow(-11),
     maturityDate: monthsFromNow(13),
     maturityAmount: 590250,
     currency: 'INR',
@@ -56,6 +57,7 @@ const accounts: Account[] = [
     tenure: 12,
     tenureElapsed: 9,
     // 12-month FD, 9 months elapsed → 3 months remaining
+    startDate: monthsFromNow(-9),
     maturityDate: monthsFromNow(3),
     maturityAmount: 214500,
     currency: 'INR',
@@ -71,6 +73,7 @@ const accounts: Account[] = [
     tenure: 6,
     tenureElapsed: 5,
     // Matures next month — auto-renew will kick in; monthly interest credited
+    startDate: monthsFromNow(-5),
     maturityDate: monthsFromNow(1),
     maturityAmount: 103400,  // principal + 6.8% p.a. over 6 months
     currency: 'INR',
