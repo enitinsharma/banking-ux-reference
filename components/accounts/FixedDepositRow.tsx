@@ -1,4 +1,6 @@
-import { Lock, RefreshCw, X } from 'lucide-react';
+'use client';
+
+import { Lock } from 'lucide-react';
 import { formatCurrency, formatCurrencyCompact, formatDate } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
 import type { FixedDepositAccount } from '@/types/account';
@@ -9,6 +11,19 @@ const PAYOUT_LABEL: Record<FixedDepositAccount['payoutFrequency'], string> = {
   on_maturity: 'Payout at maturity',
 };
 
+/* ── Toggle switch ────────────────────────────────────────── */
+function Toggle({ checked, label }: { checked: boolean; label: string }) {
+  return (
+    <label className="flex cursor-pointer items-center gap-2">
+      <div className={`relative h-4 w-7 rounded-full transition-colors ${checked ? 'bg-violet-500' : 'bg-gray-300'}`}>
+        <div className={`absolute top-0.5 h-3 w-3 rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-3' : 'translate-x-0.5'}`} />
+      </div>
+      <span className="text-xs text-content-secondary">{label}</span>
+    </label>
+  );
+}
+
+/* ── Progress bar ─────────────────────────────────────────── */
 function ProgressBar({ value }: { value: number }) {
   return (
     <div className="h-1.5 w-full overflow-hidden rounded-full bg-brand-page">
@@ -20,6 +35,7 @@ function ProgressBar({ value }: { value: number }) {
   );
 }
 
+/* ── Amount block ─────────────────────────────────────────── */
 function AmountBlock({ account }: { account: FixedDepositAccount }) {
   const totalInterest = account.maturityAmount - account.principal;
 
@@ -77,11 +93,12 @@ function AmountBlock({ account }: { account: FixedDepositAccount }) {
   );
 }
 
+/* ── Main row ─────────────────────────────────────────────── */
 interface Props { account: FixedDepositAccount }
 
 export function FixedDepositRow({ account }: Props) {
-  const progress   = Math.round((account.tenureElapsed / account.tenure) * 100);
-  const monthsLeft = account.tenure - account.tenureElapsed;
+  const progress    = Math.round((account.tenureElapsed / account.tenure) * 100);
+  const monthsLeft  = account.tenure - account.tenureElapsed;
   const nearMaturity = monthsLeft <= 3;
 
   return (
@@ -106,37 +123,11 @@ export function FixedDepositRow({ account }: Props) {
             <AmountBlock account={account} />
           </div>
 
-          {/* Badges */}
-          <div className="mt-2 flex flex-wrap items-center gap-1.5">
-            {/* Payout frequency — desktop only */}
-            <span className="hidden rounded-full border border-ui-border px-2 py-0.5 text-[11px] text-content-secondary sm:inline">
+          {/* Payout badge — desktop only */}
+          <div className="mt-2 hidden sm:block">
+            <span className="rounded-full border border-ui-border px-2 py-0.5 text-[11px] text-content-secondary">
               {PAYOUT_LABEL[account.payoutFrequency]}
             </span>
-
-            {/* Auto-renew chip — clickable toggle; shown on all breakpoints */}
-            {account.autoRenew ? (
-              <button
-                type="button"
-                title="Click to cancel auto-renew"
-                className="flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-medium text-violet-700 transition-colors hover:bg-rose-50 hover:text-rose-600"
-              >
-                <RefreshCw className="h-2.5 w-2.5" />
-                Auto-renew
-                <X className="h-2.5 w-2.5 opacity-60" />
-              </button>
-            ) : (
-              // Offer to enable auto-renew when near maturity
-              nearMaturity && (
-                <button
-                  type="button"
-                  title="Enable auto-renew"
-                  className="flex items-center gap-1 rounded-full border border-dashed border-violet-300 px-2 py-0.5 text-[11px] text-violet-500 transition-colors hover:bg-violet-50"
-                >
-                  <RefreshCw className="h-2.5 w-2.5" />
-                  Enable auto-renew
-                </button>
-              )
-            )}
           </div>
 
           {/* Progress */}
@@ -153,14 +144,41 @@ export function FixedDepositRow({ account }: Props) {
             </div>
           </div>
 
-          {/* Contextual actions */}
-          <div className="mt-3 flex gap-2">
-            {/* Renew only when near maturity and auto-renew is off */}
-            {nearMaturity && !account.autoRenew && (
-              <Button variant="primary" size="sm">Renew</Button>
+          {/* ── Renewal section ── */}
+          <div className="mt-3 space-y-2.5">
+
+            {nearMaturity && !account.autoRenew ? (
+              /* Near maturity + auto-renew off → explicit prompt */
+              <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5">
+                <p className="text-xs font-medium text-amber-800">
+                  Matures in {monthsLeft} month{monthsLeft !== 1 ? 's' : ''} — what would you like to do?
+                </p>
+                <div className="mt-2 flex gap-2">
+                  <Button variant="primary" size="sm">Renew FD</Button>
+                  <Button variant="secondary" size="sm">Credit to savings</Button>
+                </div>
+              </div>
+            ) : (
+              /* All other states → toggle + optional confirmation */
+              <div className="space-y-1.5">
+                <Toggle
+                  checked={!!account.autoRenew}
+                  label="Auto-renew on maturity"
+                />
+                {account.autoRenew && nearMaturity && (
+                  <p className="text-[11px] text-emerald-600">
+                    Will renew automatically on {formatDate(account.maturityDate)}
+                  </p>
+                )}
+              </div>
             )}
-            <Button variant="ghost" size="sm" className="hidden sm:inline-flex">Withdraw</Button>
-            <Button variant="ghost" size="sm" className="hidden sm:inline-flex">Advice</Button>
+
+            {/* Secondary actions */}
+            <div className="flex gap-2">
+              <Button variant="ghost" size="sm" className="hidden sm:inline-flex">Withdraw</Button>
+              <Button variant="ghost" size="sm" className="hidden sm:inline-flex">Advice</Button>
+            </div>
+
           </div>
         </div>
       </div>
