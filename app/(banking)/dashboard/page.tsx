@@ -4,12 +4,19 @@ import { QuickActions } from '@/components/dashboard/QuickActions';
 import { AccountSummary } from '@/components/dashboard/AccountSummary';
 import { RecentTransactions } from '@/components/dashboard/RecentTransactions';
 
+function greeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good morning';
+  if (hour < 17) return 'Good afternoon';
+  return 'Good evening';
+}
+
 export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <PageHeader
         title="Dashboard"
-        description="Good morning, Nitin. Here's your financial overview."
+        description={`${greeting()}, Nitin. Here's your financial overview.`}
       />
 
       {/* ── Stat cards ── */}

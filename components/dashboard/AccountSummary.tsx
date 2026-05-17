@@ -1,130 +1,64 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, Landmark, Lock } from 'lucide-react';
+import { Home, Landmark, Lock, User } from 'lucide-react';
 import { useAccounts } from '@/lib/hooks/useAccounts';
-import { formatDate } from '@/lib/utils';
-import { cn } from '@/lib/utils';
 import { Amount } from '@/components/ui/Amount';
-import type { Account } from '@/types/account';
+import type { HomeLoanAccount, PersonalLoanAccount } from '@/types/account';
 
-/* ── Progress bar ─────────────────────────────────────── */
-function ProgressBar({ value, className }: { value: number; className?: string }) {
-  return (
-    <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-brand-page">
-      <div
-        className={cn('h-full rounded-full transition-all', className ?? 'bg-accent')}
-        style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
-      />
-    </div>
-  );
-}
+type AnyLoan = HomeLoanAccount | PersonalLoanAccount;
 
-/* ── Individual account row ───────────────────────────── */
-function AccountRow({ account }: { account: Account }) {
-  if (account.type === 'savings') {
-    return (
-      <div className="flex items-start gap-3 py-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
-          <Landmark className="h-4 w-4" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-medium text-content-primary">Savings Account</p>
-          <p className="text-xs text-content-secondary">···· {account.accountNumber.slice(-4)}</p>
-        </div>
-        <div className="text-right">
-          <p className="text-sm font-semibold text-content-primary">
-            <Amount value={account.balance} />
-          </p>
-          <p className="text-xs text-content-secondary">
-            Avail. <Amount value={account.availableBalance} />
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  if (account.type === 'fixed_deposit') {
-    const progress = Math.round((account.tenureElapsed / account.tenure) * 100);
-    return (
-      <div className="py-3">
-        <div className="flex items-start gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-600">
-            <Lock className="h-4 w-4" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-content-primary">Fixed Deposit</p>
-            <p className="text-xs text-content-secondary">{account.interestRate}%</p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm font-semibold text-content-primary">
-              <Amount value={account.principal} />
-            </p>
-            <p className="text-xs text-content-secondary">
-              Matures {formatDate(account.maturityDate)}
-            </p>
-          </div>
-        </div>
-        <div className="pl-12">
-          <ProgressBar value={progress} className="bg-violet-500" />
-          <p className="mt-1 text-right text-[11px] text-content-secondary">
-            {account.tenureElapsed} of {account.tenure} months
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  if (account.type === 'home_loan') {
-    const repaid = account.principalAmount - account.outstandingAmount;
-    const progress = Math.round((repaid / account.principalAmount) * 100);
-    return (
-      <div className="py-3">
-        <div className="flex items-start gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
-            <Home className="h-4 w-4" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-content-primary">Home Loan</p>
-            <p className="text-xs text-content-secondary">{account.interestRate}%</p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm font-semibold text-content-primary">
-              <Amount value={account.outstandingAmount} />
-            </p>
-            <p className="text-xs text-content-secondary">outstanding</p>
-          </div>
-        </div>
-        <div className="pl-12">
-          <ProgressBar value={progress} className="bg-amber-500" />
-          <p className="mt-1 text-right text-[11px] text-content-secondary">
-            EMI <Amount value={account.emi} /> · due {formatDate(account.nextEmiDate)}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  return null;
+function sanctioned(loan: AnyLoan) {
+  return loan.type === 'home_loan' ? loan.principalAmount : loan.sanctionedAmount;
 }
 
 /* ── Skeleton ─────────────────────────────────────────── */
 function Skeleton() {
   return (
-    <div className="animate-pulse space-y-3 py-3">
+    <div className="animate-pulse divide-y divide-ui-border">
       {[0, 1, 2].map(i => (
-        <div key={i} className="flex items-center gap-3">
+        <div key={i} className="flex items-center gap-3 py-3.5">
           <div className="h-9 w-9 rounded-lg bg-brand-page" />
           <div className="flex-1 space-y-1.5">
             <div className="h-3 w-28 rounded bg-brand-page" />
-            <div className="h-2.5 w-16 rounded bg-brand-page" />
+            <div className="h-2.5 w-44 rounded bg-brand-page" />
           </div>
-          <div className="space-y-1.5 text-right">
-            <div className="h-3 w-20 rounded bg-brand-page" />
-            <div className="h-2.5 w-14 rounded bg-brand-page" />
-          </div>
+          <div className="h-3 w-16 rounded bg-brand-page" />
         </div>
       ))}
+    </div>
+  );
+}
+
+/* ── Summary row ──────────────────────────────────────── */
+function SummaryRow({
+  icon: Icon,
+  iconClassName,
+  label,
+  meta,
+  primary,
+  primaryLabel,
+}: {
+  icon: React.ElementType;
+  iconClassName: string;
+  label: string;
+  meta: string;
+  primary: React.ReactNode;
+  primaryLabel: string;
+}) {
+  return (
+    <div className="flex items-center gap-3 py-3.5">
+      <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${iconClassName}`}>
+        <Icon className="h-4 w-4" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-medium text-content-primary">{label}</p>
+        <p className="truncate text-xs text-content-secondary">{meta}</p>
+      </div>
+      <div className="shrink-0 text-right">
+        <p className="text-sm font-semibold text-content-primary">{primary}</p>
+        <p className="text-xs text-content-secondary">{primaryLabel}</p>
+      </div>
     </div>
   );
 }
@@ -133,14 +67,26 @@ function Skeleton() {
 export function AccountSummary() {
   const { accounts, loading, error } = useAccounts();
 
+  const savings  = accounts.filter(a => a.type === 'savings');
+  const fds      = accounts.filter(a => a.type === 'fixed_deposit');
+  const loans    = accounts.filter(
+    a => a.type === 'home_loan' || a.type === 'personal_loan',
+  ) as AnyLoan[];
+
+  const totalAvailable  = savings.reduce((s, a) => s + (a.type === 'savings' ? a.availableBalance : 0), 0);
+  const totalPrincipal  = fds.reduce((s, a) => s + (a.type === 'fixed_deposit' ? a.principal : 0), 0);
+  const totalMaturity   = fds.reduce((s, a) => s + (a.type === 'fixed_deposit' ? a.maturityAmount : 0), 0);
+  const totalOutstanding = loans.reduce((s, l) => s + l.outstandingAmount, 0);
+  const totalSanctioned  = loans.reduce((s, l) => s + sanctioned(l), 0);
+  const repaidPercent    = totalSanctioned > 0
+    ? Math.round(((totalSanctioned - totalOutstanding) / totalSanctioned) * 100)
+    : 0;
+
   return (
     <div className="rounded-xl border border-ui-border bg-brand-card p-5">
       <div className="mb-1 flex items-center justify-between">
         <h2 className="text-base font-semibold text-content-primary">Accounts</h2>
-        <Link
-          href="/accounts"
-          className="text-xs font-medium text-accent hover:underline"
-        >
+        <Link href="/accounts" className="text-xs font-medium text-accent hover:underline">
           View all
         </Link>
       </div>
@@ -155,9 +101,36 @@ export function AccountSummary() {
 
       {!loading && !error && (
         <div className="divide-y divide-ui-border">
-          {accounts.map(account => (
-            <AccountRow key={account.id} account={account} />
-          ))}
+          {savings.length > 0 && (
+            <SummaryRow
+              icon={Landmark}
+              iconClassName="bg-blue-50 text-blue-600"
+              label="Savings"
+              meta={`${savings.length} account${savings.length > 1 ? 's' : ''}`}
+              primary={<Amount value={totalAvailable} />}
+              primaryLabel="available"
+            />
+          )}
+          {fds.length > 0 && (
+            <SummaryRow
+              icon={Lock}
+              iconClassName="bg-violet-50 text-violet-600"
+              label="Fixed Deposits"
+              meta={`${fds.length} deposit${fds.length > 1 ? 's' : ''} · ₹${(totalMaturity / 100000).toFixed(1)}L at maturity`}
+              primary={<Amount value={totalPrincipal} />}
+              primaryLabel="principal"
+            />
+          )}
+          {loans.length > 0 && (
+            <SummaryRow
+              icon={loans.some(l => l.type === 'home_loan') ? Home : User}
+              iconClassName="bg-amber-50 text-amber-600"
+              label="Loans"
+              meta={`${loans.length} loan${loans.length > 1 ? 's' : ''} · ${repaidPercent}% repaid`}
+              primary={<Amount value={totalOutstanding} />}
+              primaryLabel="outstanding"
+            />
+          )}
         </div>
       )}
     </div>

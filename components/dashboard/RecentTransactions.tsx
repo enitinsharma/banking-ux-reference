@@ -14,6 +14,7 @@ import {
   Wifi,
   Zap,
 } from 'lucide-react';
+import { useAccounts } from '@/lib/hooks/useAccounts';
 import { useTransactions } from '@/lib/hooks/useTransactions';
 import { formatDate } from '@/lib/utils';
 import { cn } from '@/lib/utils';
@@ -59,6 +60,15 @@ function Skeleton() {
 /* ── Main component ───────────────────────────────────── */
 export function RecentTransactions() {
   const { transactions, loading, error } = useTransactions({ limit: 5 });
+  const { accounts } = useAccounts();
+
+  function accountLabel(accountId: string) {
+    const acc = accounts.find(a => a.id === accountId);
+    if (!acc) return null;
+    const last4 = `****${acc.accountNumber.slice(-4)}`;
+    const isJoint = acc.type === 'savings' && acc.isJoint;
+    return isJoint ? `${last4} · Joint` : last4;
+  }
 
   return (
     <div className="rounded-xl border border-ui-border bg-brand-card p-5">
@@ -102,8 +112,8 @@ export function RecentTransactions() {
                   <p className="truncate text-sm font-medium text-content-primary">
                     {txn.description}
                   </p>
-                  <p className="text-xs text-content-secondary">
-                    {meta.label} · {formatDate(txn.date)}
+                  <p className="truncate text-xs text-content-secondary">
+                    {meta.label} · {accountLabel(txn.accountId)} · {formatDate(txn.date)}
                   </p>
                 </div>
 

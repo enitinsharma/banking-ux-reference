@@ -52,6 +52,15 @@ export const nextMonthDay = (day: number): string => {
   return fmt(new Date(d.getFullYear(), d.getMonth() + 1, day));
 };
 
+/** YYYY-MM-DD for a specific day in a past month (monthsAgo=1 means last month) */
+export const pastMonthDay = (monthsAgo: number, day: number): string => {
+  const d = new Date();
+  d.setDate(1); // anchor to 1st to avoid month-end overflow
+  d.setMonth(d.getMonth() - monthsAgo);
+  d.setDate(day);
+  return fmt(d);
+};
+
 /** Full ISO-8601 timestamp N days in the past at a given hour (default 10:30) */
 export const isoDaysAgo = (n: number, hour = 10): string => {
   const d = new Date();

@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react';
+import Link from 'next/link';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { LucideIcon } from 'lucide-react';
@@ -18,13 +19,17 @@ interface StatCardProps {
   /** Tailwind classes for the icon container, e.g. "bg-blue-50 text-blue-600" */
   iconClassName: string;
   trend?: Trend;
+  /** Optional amber contextual note shown below sub, e.g. hold amount */
+  alert?: string;
+  /** Optional action link shown at the bottom of the card */
+  action?: { label: string; href: string };
 }
 
-export function StatCard({ label, value, sub, icon: Icon, iconClassName, trend }: StatCardProps) {
+export function StatCard({ label, value, sub, icon: Icon, iconClassName, trend, alert, action }: StatCardProps) {
   const isPositive = trend ? (trend.positive ?? trend.direction === 'up') : true;
 
   return (
-    <div className="rounded-xl border border-ui-border bg-brand-card p-5">
+    <div className="flex flex-col rounded-xl border border-ui-border bg-brand-card p-5">
       <div className="flex items-start justify-between">
         {/* Icon pill */}
         <div className={cn('flex h-10 w-10 items-center justify-center rounded-lg', iconClassName)}>
@@ -49,7 +54,7 @@ export function StatCard({ label, value, sub, icon: Icon, iconClassName, trend }
         )}
       </div>
 
-      <div className="mt-4">
+      <div className="mt-4 flex-1">
         <p className="text-xs font-medium uppercase tracking-wide text-content-secondary">
           {label}
         </p>
@@ -57,7 +62,21 @@ export function StatCard({ label, value, sub, icon: Icon, iconClassName, trend }
           {value}
         </p>
         <p className="mt-0.5 text-xs text-content-secondary">{sub}</p>
+        {alert && (
+          <p className="mt-1 text-xs text-amber-600">{alert}</p>
+        )}
       </div>
+
+      {action && (
+        <div className="mt-auto pt-3 border-t border-ui-border">
+          <Link
+            href={action.href}
+            className="text-xs font-medium text-accent hover:underline"
+          >
+            {action.label} →
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
