@@ -145,40 +145,31 @@ export function FixedDepositRow({ account }: Props) {
           </div>
 
           {/* ── Renewal section ── */}
-          <div className="mt-3 space-y-2.5">
+          <div className="mt-3 space-y-2">
+            {/* Toggle — same for all FDs regardless of maturity stage */}
+            <Toggle
+              checked={!!account.autoRenew}
+              label="Auto-renew on maturity"
+            />
 
-            {nearMaturity && !account.autoRenew ? (
-              /* Near maturity + auto-renew off → explicit prompt */
-              <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5">
-                <p className="text-xs font-medium text-amber-800">
-                  Matures in {monthsLeft} month{monthsLeft !== 1 ? 's' : ''} — what would you like to do?
+            {/* Contextual message — only shown near maturity */}
+            {nearMaturity && (
+              account.autoRenew ? (
+                <p className="text-[11px] text-emerald-600">
+                  Will renew automatically for {account.tenure} months on {formatDate(account.maturityDate)}
                 </p>
-                <div className="mt-2 flex gap-2">
-                  <Button variant="primary" size="sm">Renew FD</Button>
-                  <Button variant="secondary" size="sm">Credit to savings</Button>
-                </div>
-              </div>
-            ) : (
-              /* All other states → toggle + optional confirmation */
-              <div className="space-y-1.5">
-                <Toggle
-                  checked={!!account.autoRenew}
-                  label="Auto-renew on maturity"
-                />
-                {account.autoRenew && nearMaturity && (
-                  <p className="text-[11px] text-emerald-600">
-                    Will renew automatically on {formatDate(account.maturityDate)}
-                  </p>
-                )}
-              </div>
+              ) : (
+                <p className="text-[11px] text-amber-600">
+                  ₹{formatCurrencyCompact(account.maturityAmount)} will be credited to your savings account in {monthsLeft} month{monthsLeft !== 1 ? 's' : ''}
+                </p>
+              )
             )}
 
             {/* Secondary actions */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 pt-1">
               <Button variant="ghost" size="sm" className="hidden sm:inline-flex">Withdraw</Button>
               <Button variant="ghost" size="sm" className="hidden sm:inline-flex">Advice</Button>
             </div>
-
           </div>
         </div>
       </div>
