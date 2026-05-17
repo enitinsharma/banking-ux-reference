@@ -18,8 +18,8 @@ export function Shell({ children }: { children: ReactNode }) {
       <Sidebar />
 
       {/* Content — no left margin on mobile, 240 px offset on desktop */}
-      <div className="flex min-h-screen flex-col pt-16 pb-16 lg:ml-60 lg:pb-0">
-        <main className="flex-1 bg-brand-page px-4 py-6 lg:px-6">
+      <div className="flex min-h-screen flex-col overflow-x-hidden pt-16 pb-16 lg:ml-60 lg:pb-0">
+        <main className="flex-1 w-full min-w-0 bg-brand-page px-4 py-6 lg:px-6">
           {children}
         </main>
         <Footer />
