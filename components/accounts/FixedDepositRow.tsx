@@ -167,7 +167,7 @@ export function FixedDepositRow({ account }: Props) {
                 Will renew automatically for {account.tenure} months on {formatDate(account.maturityDate)}
               </p>
             ) : (
-              <p className="text-[11px] text-amber-600">
+              <p className="text-[11px] text-content-secondary">
                 Amount will be credited to your savings account on {formatDate(account.maturityDate)}
               </p>
             )}
