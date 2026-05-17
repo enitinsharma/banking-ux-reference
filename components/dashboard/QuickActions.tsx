@@ -59,7 +59,7 @@ export function QuickActions() {
     <>
       <div className="rounded-xl border border-ui-border bg-brand-page p-5">
         <h2 className="mb-4 text-base font-semibold text-content-primary">Quick Actions</h2>
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {actions.map(({ id, label, sublabel, icon: Icon, href, iconClassName, ringClassName }) => {
             const tile = (
               <div className={cn(
