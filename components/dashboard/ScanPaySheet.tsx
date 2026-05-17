@@ -103,7 +103,7 @@ export function ScanPaySheet({ open, onClose }: ScanPaySheetProps) {
         {/* Manual UPI ID entry */}
         {manualMode && (
           <div className="space-y-4 px-5 pb-10">
-            <p className="text-sm text-content-secondary">Enter the recipient's UPI ID</p>
+            <p className="text-sm text-content-secondary">Enter the recipient&apos;s UPI ID</p>
 
             <input
               type="text"
