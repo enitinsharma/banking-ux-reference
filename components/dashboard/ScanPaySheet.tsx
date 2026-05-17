@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { Keyboard, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
+import { QrScanner } from './QrScanner';
+import type { PayeeInfo } from './QrScanner';
 
 interface ScanPaySheetProps {
   open: boolean;
@@ -13,8 +16,9 @@ interface ScanPaySheetProps {
 export function ScanPaySheet({ open, onClose }: ScanPaySheetProps) {
   const [manualMode, setManualMode] = useState(false);
   const [upiId, setUpiId] = useState('');
+  const router = useRouter();
 
-  // Reset state when sheet closes
+  // Reset on close
   useEffect(() => {
     if (!open) {
       setManualMode(false);
@@ -29,6 +33,19 @@ export function ScanPaySheet({ open, onClose }: ScanPaySheetProps) {
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, [open, onClose]);
+
+  function handleConfirm(payee: PayeeInfo) {
+    onClose();
+    const params = new URLSearchParams({ to: payee.upiId, name: payee.name });
+    if (payee.amount != null) params.set('amount', String(payee.amount));
+    if (payee.note)           params.set('note', payee.note);
+    router.push(`/transfer?${params}`);
+  }
+
+  function handleManualProceed() {
+    onClose();
+    router.push(`/transfer?to=${encodeURIComponent(upiId)}`);
+  }
 
   return (
     <>
@@ -58,7 +75,14 @@ export function ScanPaySheet({ open, onClose }: ScanPaySheetProps) {
 
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4">
-          <h2 className="text-base font-semibold text-content-primary">Scan & Pay</h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-base font-semibold text-content-primary">Scan & Pay</h2>
+            {manualMode && (
+              <span className="rounded-full bg-brand-page px-2 py-0.5 text-xs text-content-secondary">
+                Manual
+              </span>
+            )}
+          </div>
           <button
             onClick={onClose}
             aria-label="Close"
@@ -68,62 +92,48 @@ export function ScanPaySheet({ open, onClose }: ScanPaySheetProps) {
           </button>
         </div>
 
-        {!manualMode ? (
-          <div className="px-5 pb-10">
-            {/* QR Viewfinder */}
-            <div className="relative mx-auto mb-5 h-56 w-56 overflow-hidden rounded-2xl bg-neutral-900">
-              {/* Corner brackets */}
-              <span className="absolute left-3 top-3 h-7 w-7 rounded-tl border-l-2 border-t-2 border-white" />
-              <span className="absolute right-3 top-3 h-7 w-7 rounded-tr border-r-2 border-t-2 border-white" />
-              <span className="absolute bottom-3 left-3 h-7 w-7 rounded-bl border-b-2 border-l-2 border-white" />
-              <span className="absolute bottom-3 right-3 h-7 w-7 rounded-br border-b-2 border-r-2 border-white" />
+        {/* Scanner (mounts the real QR scanner) */}
+        {!manualMode && (
+          <QrScanner
+            onConfirm={handleConfirm}
+            onManualEntry={() => setManualMode(true)}
+          />
+        )}
 
-              {/* Animated scan line */}
-              <span className="animate-scan-line absolute left-4 right-4 h-0.5 rounded-full bg-accent/80 shadow-[0_0_6px_2px] shadow-accent/40" />
-
-              {/* Demo overlay — replace with real camera stream */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center">
-                <p className="text-xs leading-relaxed text-white/60">
-                  Camera access required<br />to scan QR codes
-                </p>
-                <Button size="sm">Enable Camera</Button>
-              </div>
-            </div>
-
-            <p className="mb-5 text-center text-xs text-content-secondary">
-              Works with any UPI QR code — PhonePe, Google Pay, Paytm&nbsp;…
-            </p>
-
-            <button
-              onClick={() => setManualMode(true)}
-              className="mx-auto flex items-center gap-1.5 text-xs font-medium text-accent hover:underline"
-            >
-              <Keyboard className="h-3.5 w-3.5" />
-              Enter UPI ID manually
-            </button>
-          </div>
-        ) : (
+        {/* Manual UPI ID entry */}
+        {manualMode && (
           <div className="space-y-4 px-5 pb-10">
             <p className="text-sm text-content-secondary">Enter the recipient's UPI ID</p>
 
             <input
               type="text"
               autoFocus
-              placeholder="name@upi  or  mobile@bank"
+              placeholder="name@upi  ·  mobile@bank  ·  handle@paytm"
               value={upiId}
               onChange={e => setUpiId(e.target.value)}
               className={cn(
                 'w-full rounded-lg border border-ui-border bg-brand-page px-3 py-2.5',
-                'text-sm text-content-primary placeholder:text-content-secondary',
+                'font-mono text-sm text-content-primary placeholder:font-sans placeholder:text-content-secondary',
                 'focus:outline-none focus:ring-2 focus:ring-accent',
               )}
             />
 
             <div className="flex gap-3">
-              <Button variant="secondary" className="flex-1" onClick={() => setManualMode(false)}>
-                Back
+              <Button
+                variant="secondary"
+                className="flex-1"
+                onClick={() => setManualMode(false)}
+              >
+                <span className="flex items-center gap-1.5">
+                  <Keyboard className="h-3.5 w-3.5" />
+                  Use Camera
+                </span>
               </Button>
-              <Button className="flex-1" disabled={!upiId.includes('@')}>
+              <Button
+                className="flex-1"
+                disabled={!upiId.includes('@')}
+                onClick={handleManualProceed}
+              >
                 Proceed
               </Button>
             </div>
