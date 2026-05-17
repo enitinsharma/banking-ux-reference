@@ -15,8 +15,14 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "NovaBank — Online Banking",
-  description: "NovaBank reference banking application — built with Next.js 14",
+  title: "Bank of Happy Customers",
+  description: "Modern online banking — accounts, transfers, deposits and more.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "My Bank",
+  },
 };
 
 export default function RootLayout({
@@ -24,6 +30,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" data-theme="arctic-white">
+      <head>
+        <meta name="theme-color" content="#1e40af" />
+        <meta name="mobile-web-app-capable" content="yes" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
         <MSWProvider>{children}</MSWProvider>
       </body>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="#1e40af"/>
+  <!-- Columns -->
+  <rect x="144" y="220" width="36" height="140" rx="6" fill="white"/>
+  <rect x="220" y="220" width="36" height="140" rx="6" fill="white"/>
+  <rect x="296" y="220" width="36" height="140" rx="6" fill="white"/>
+  <rect x="372" y="220" width="36" height="140" rx="6" fill="white"/>
+  <!-- Base -->
+  <rect x="120" y="356" width="272" height="24" rx="6" fill="white"/>
+  <rect x="104" y="376" width="304" height="20" rx="6" fill="white"/>
+  <!-- Pediment / roof -->
+  <rect x="120" y="192" width="272" height="20" rx="4" fill="white"/>
+  <!-- Triangle peak -->
+  <polygon points="256,136 392,196 120,196" fill="white"/>
+  <!-- Star / accent dot at peak -->
+  <circle cx="256" cy="128" r="14" fill="#fbbf24"/>
+</svg>
