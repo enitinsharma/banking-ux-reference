@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Prevent horizontal scroll on all viewports ─── */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 /* ─── Arctic White (default / SSR fallback) ─── */
 :root,
 [data-theme="arctic-white"] {
