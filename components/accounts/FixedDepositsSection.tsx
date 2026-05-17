@@ -1,4 +1,4 @@
-import { formatCurrency } from '@/lib/utils';
+import { Amount } from '@/components/ui/Amount';
 import { Button } from '@/components/ui/Button';
 import { FixedDepositRow } from './FixedDepositRow';
 import type { FixedDepositAccount } from '@/types/account';
@@ -32,21 +32,15 @@ export function FixedDepositsSection({ accounts }: Props) {
             <div className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-xs text-content-secondary">
               <span>
                 Principal&nbsp;
-                <span className="font-semibold text-content-primary">
-                  {formatCurrency(totalPrincipal)}
-                </span>
+                <Amount value={totalPrincipal} className="font-semibold text-content-primary" />
               </span>
               <span>
                 At maturity&nbsp;
-                <span className="font-semibold text-violet-600">
-                  {formatCurrency(totalMaturity)}
-                </span>
+                <Amount value={totalMaturity} className="font-semibold text-violet-600" />
               </span>
               <span>
                 Interest&nbsp;
-                <span className="font-semibold text-emerald-600">
-                  +{formatCurrency(totalInterest)}
-                </span>
+                <Amount value={totalInterest} prefix="+" className="font-semibold text-emerald-600" />
               </span>
             </div>
           </div>

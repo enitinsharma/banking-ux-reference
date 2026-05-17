@@ -166,9 +166,9 @@ export function FixedDepositRow({ account }: Props) {
             )}
 
             {/* Secondary actions */}
-            <div className="flex gap-2 pt-1">
-              <Button variant="ghost" size="sm" className="hidden sm:inline-flex">Withdraw</Button>
-              <Button variant="ghost" size="sm" className="hidden sm:inline-flex">Advice</Button>
+            <div className="flex flex-wrap gap-2 pt-1">
+              <Button variant="secondary" size="sm">Withdraw</Button>
+              <Button variant="secondary" size="sm">Advice</Button>
             </div>
           </div>
         </div>

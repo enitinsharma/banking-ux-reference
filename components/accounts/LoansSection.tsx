@@ -1,4 +1,4 @@
-import { formatCurrency } from '@/lib/utils';
+import { Amount } from '@/components/ui/Amount';
 import { HomeLoanRow } from './HomeLoanRow';
 import { PersonalLoanRow } from './PersonalLoanRow';
 import type { HomeLoanAccount, PersonalLoanAccount } from '@/types/account';
@@ -39,21 +39,15 @@ export function LoansSection({ accounts }: Props) {
           <div className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-xs text-content-secondary">
             <span>
               Outstanding&nbsp;
-              <span className="font-semibold text-content-primary">
-                {formatCurrency(totalOutstanding)}
-              </span>
+              <Amount value={totalOutstanding} className="font-semibold text-content-primary" />
             </span>
             <span>
               Repaid&nbsp;
-              <span className="font-semibold text-emerald-600">
-                {formatCurrency(totalRepaid)}
-              </span>
+              <Amount value={totalRepaid} className="font-semibold text-emerald-600" />
             </span>
             <span>
               Sanctioned&nbsp;
-              <span className="font-semibold text-content-primary">
-                {formatCurrency(totalSanctioned)}
-              </span>
+              <Amount value={totalSanctioned} className="font-semibold text-content-primary" />
             </span>
           </div>
         </div>

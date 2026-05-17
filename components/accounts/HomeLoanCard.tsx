@@ -114,7 +114,7 @@ export function HomeLoanCard({ account }: Props) {
         {/* ── Actions ── */}
         <div className="mt-5 flex flex-wrap gap-3">
           <Link href="/transfer">
-            <Button variant="primary" size="sm">Pay EMI</Button>
+            <Button variant="primary" size="sm">Pre-pay</Button>
           </Link>
           <Button variant="secondary" size="sm">Download Statement</Button>
           <Button variant="ghost" size="sm">Loan Details</Button>

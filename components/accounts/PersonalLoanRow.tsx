@@ -104,10 +104,9 @@ export function PersonalLoanRow({ account }: Props) {
           {/* Actions — primary only on mobile */}
           <div className="mt-3 flex gap-2">
             <Link href="/transfer">
-              <Button variant="ghost" size="sm">Pay EMI</Button>
+              <Button variant="secondary" size="sm">Pre-pay</Button>
             </Link>
-            <Button variant="ghost" size="sm" className="hidden sm:inline-flex">Pre-close</Button>
-            <Button variant="ghost" size="sm" className="hidden sm:inline-flex">Statement</Button>
+            <Button variant="secondary" size="sm">Statement</Button>
           </div>
         </div>
       </div>
